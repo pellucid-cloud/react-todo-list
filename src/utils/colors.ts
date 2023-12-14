@@ -1,5 +1,5 @@
-function getBaseColors(hex){
-  const _parseInt = (number) => {
+function getBaseColors(hex: string){
+  const _parseInt = (number: string) => {
     return parseInt(number);
   }
   const prefix = '0x';
@@ -28,7 +28,7 @@ export function hexToRgb(hex: string) {
  * @param hex 十六进制颜色
  * @param opacity 透明度
  */
-export function hexToRgba(hex, opacity) {
+export function hexToRgba(hex: string, opacity: number) {
   const {red, green, blue} = getBaseColors(hex)
   return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
 }

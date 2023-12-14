@@ -1,49 +1,21 @@
-import React, {useState} from 'react';
-import {UserOutlined, PieChartOutlined, DesktopOutlined, TeamOutlined, FileOutlined} from '@ant-design/icons';
-import type {MenuProps} from 'antd';
-import {Layout, theme} from 'antd';
-import {Breadcrumb} from '@/components/Breadcrumb'
-import {Header} from '@/layout/Header'
-import {Menu} from "@/components/Menu";
+import React, { useState } from 'react';
+import { Layout, theme } from 'antd';
+import { Breadcrumb } from '@/components/Breadcrumb'
+import { Header } from '@/layout/Header'
+import { Menu } from "@/layout/Menu";
 import styled from "styled-components";
-import {Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { getMenuList } from '@/config';
 
-const {Content, Sider} = Layout;
-type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  } as MenuItem;
-}
-
-const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined/>),
-  getItem('Option 2', '2', <DesktopOutlined/>),
-  getItem('User', 'sub1', <UserOutlined/>, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined/>, [
-    getItem('Team 1', '6'),
-    getItem('Team 2', '8')
-  ]),
-  getItem('Files', '9', <FileOutlined/>),
-];
+const { Content, Sider } = Layout;
 
 export const BaseLayout: React.FC = () => {
   const {
-    token: {colorBgContainer},
+    token: { colorBgContainer },
   } = theme.useToken();
+  const menuList = getMenuList()
+  console.log(menuList);
+  
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Wrapper>
@@ -51,11 +23,11 @@ export const BaseLayout: React.FC = () => {
         <Header />
         <Layout>
           <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-            <div className="demo-logo-vertical"/>
-            <Menu items={items}/>
+            <div className="demo-logo-vertical" />
+            <Menu items={menuList} />
           </Sider>
-          <Layout style={{padding: '24px'}}>
-            <Breadcrumb/>
+          <Layout style={{ padding: '24px' }}>
+            <Breadcrumb />
             <Content
               style={{
                 padding: 24,
@@ -64,7 +36,7 @@ export const BaseLayout: React.FC = () => {
                 background: colorBgContainer,
               }}
             >
-              <Outlet/>
+              <Outlet />
             </Content>
           </Layout>
         </Layout>

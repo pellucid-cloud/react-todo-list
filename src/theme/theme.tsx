@@ -1,5 +1,5 @@
-import {COLORS} from "@/theme/colors";
-import {ThemeConfig} from "antd";
+import { COLORS } from "@/theme/colors";
+import { ThemeConfig } from "antd";
 
 export const themeConfig = {
   components: {
@@ -13,7 +13,8 @@ export const themeConfig = {
       darkItemColor: COLORS.textColor,
       darkItemHoverColor: COLORS.textColorHover,
       darkSubMenuItemBg: COLORS.siderBg.content,
-      darkItemSelectedColor: COLORS.textColor
+      darkItemSelectedColor: COLORS.textColor,
+      darkGroupTitleColor: COLORS.textColor,
     }
   },
 } as ThemeConfig

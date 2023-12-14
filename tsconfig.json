@@ -22,8 +22,8 @@
     "allowSyntheticDefaultImports": true,
 
     "paths": {
-      "@/*": ["src/*"],
-      "types/*": ["types/*"],
+      "@/*": ["./src/*"],
+      "types/*": ["./types/*"],
       // "themes/*": ["themes/*"],
       // "plugins/*": ["plugins/*"],
     }
