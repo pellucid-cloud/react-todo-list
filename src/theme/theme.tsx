@@ -13,8 +13,9 @@ export const themeConfig = {
       darkItemColor: COLORS.textColor,
       darkItemHoverColor: COLORS.textColorHover,
       darkSubMenuItemBg: COLORS.siderBg.content,
-      darkItemSelectedColor: COLORS.textColor,
-      darkGroupTitleColor: COLORS.textColor,
+      darkItemSelectedColor: COLORS.textColorActive,
+      darkGroupTitleColor: COLORS.textColorHover,
+      darkItemSelectedBg: COLORS.siderBg.bottom
     }
   },
 } as ThemeConfig

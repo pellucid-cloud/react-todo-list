@@ -1,13 +1,19 @@
-import {Menu as AntdMenu, MenuProps} from 'antd'
-import {ItemType} from "antd/es/menu/hooks/useItems";
-import { useNavigate } from 'react-router-dom';
-export function Menu(props: {items: ItemType[]}){
+import {Menu as AntdMenu} from 'antd'
+import {useNavigate} from 'react-router-dom';
+import {useState} from "react";
+import {MenuItemProps, defaultMenu} from "@/config/menu";
+import {getCurrentPath} from "@/utils/window";
+
+export function Menu(props: { items: MenuItemProps[] }) {
   const {items} = props
   const navigate = useNavigate();
-  const onClick: MenuProps['onClick'] = (e) => {
-    navigate(e.key)
+  const key = getCurrentPath() || defaultMenu
+  const [selectKeys, setSelectKeys] = useState<string[]>([key]);
+  const handleSelect = ({key}) => {
+    setSelectKeys(key)
+    navigate(key)
   };
   return (
-    <AntdMenu theme="dark" items={items} onClick={onClick}></AntdMenu>
+    <AntdMenu theme="dark" selectedKeys={selectKeys} items={items} onSelect={handleSelect}></AntdMenu>
   )
 }

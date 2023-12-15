@@ -1,33 +1,32 @@
-import React, { useState } from 'react';
-import { Layout, theme } from 'antd';
-import { Breadcrumb } from '@/components/Breadcrumb'
-import { Header } from '@/layout/Header'
-import { Menu } from "@/layout/Menu";
+import React, {useState} from 'react';
+import {Alert, Layout, Spin, theme} from 'antd';
+import {Breadcrumb} from '@/components/Breadcrumb'
+import {Header} from '@/layout/Header'
+import {Menu} from "@/layout/Menu";
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
-import { getMenuList } from '@/config';
+import {Outlet} from "react-router-dom";
+import {getMenuList} from '@/config';
 
-const { Content, Sider } = Layout;
+const {Content, Sider} = Layout;
 
 export const BaseLayout: React.FC = () => {
   const {
-    token: { colorBgContainer },
+    token: {colorBgContainer},
   } = theme.useToken();
   const menuList = getMenuList()
-  console.log(menuList);
-  
+
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Wrapper>
       <Layout className="main-container">
-        <Header />
+        <Header/>
         <Layout>
           <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-            <div className="demo-logo-vertical" />
-            <Menu items={menuList} />
+            <div className="demo-logo-vertical"/>
+            <Menu items={menuList}/>
           </Sider>
-          <Layout style={{ padding: '24px' }}>
-            <Breadcrumb />
+          <Layout style={{padding: '24px'}}>
+            <Breadcrumb/>
             <Content
               style={{
                 padding: 24,
@@ -36,7 +35,17 @@ export const BaseLayout: React.FC = () => {
                 background: colorBgContainer,
               }}
             >
-              <Outlet />
+              <React.Suspense fallback={
+                <Spin tip="Loading...">
+                  <Alert
+                    message="Alert message title"
+                    description="Further details about the context of this alert."
+                    type="info"
+                  />
+                </Spin>
+              }>
+                <Outlet/>
+              </React.Suspense>
             </Content>
           </Layout>
         </Layout>
