@@ -1,5 +1,5 @@
 import {BaseLayout} from '@/layout/BaseLayout'
-import {Page404} from '@/views/error/page404';
+import {Page404} from '@/views/Error/page404';
 import {Navigate, RouteObject} from "react-router-dom";
 import {lazy} from 'react';
 

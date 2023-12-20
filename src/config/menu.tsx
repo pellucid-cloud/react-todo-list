@@ -8,17 +8,17 @@ export default [
     children: [
       {
         label: '今日',
-        key: '/today',
+        key: 'today',
         icon: <EnvironmentTwoTone />
       },
       {
         label: '所有',
-        key: '/all',
+        key: 'all',
         icon: <DatabaseTwoTone />
       },
       {
         label: '已完成',
-        key: '/done',
+        key: 'done',
         icon: <CarryOutTwoTone />
       }
     ]
@@ -28,7 +28,7 @@ export default [
   },
   {
     label: '提醒事项',
-    key: '/remind',
+    key: 'remind',
     icon: <ExclamationCircleTwoTone />
   },
   {
@@ -36,7 +36,7 @@ export default [
   },
   {
     label: '我的列表',
-    key: '/list',
+    key: 'list',
     icon: <TagsTwoTone />
   }
 ] as MenuItemProps[]
