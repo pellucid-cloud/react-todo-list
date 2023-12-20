@@ -5,7 +5,6 @@ import React, { useCallback, useMemo } from 'react';
 import { RemindItemProps, RemindItemState, addItem, updateItem } from '@/store/modules/remind';
 import { createUUID } from '@/utils/crypto';
 import dayjs from 'dayjs'
-import { BaseOptionType } from 'antd/es/select';
 import Point from '@/components/Point';
 type ModelType = 'add' | 'update'
 type ModelTypeHandleMap = Record<ModelType, Function>

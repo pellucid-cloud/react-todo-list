@@ -26,8 +26,13 @@
       "types/*": ["./types/*"],
       // "themes/*": ["themes/*"],
       // "plugins/*": ["plugins/*"],
-    }
+    },
+    "outDir":"./",
   },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
