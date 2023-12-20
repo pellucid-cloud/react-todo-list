@@ -17,6 +17,7 @@ function useReminds() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
     const delay = tomorrow.valueOf() - now.valueOf();
+    // TODO: 为确保精准计时，后期可使用Web Worker优化
     const timer = setTimeout(() => {
       setUpdate(true)
     }, delay);
@@ -29,11 +30,11 @@ function useReminds() {
     const initial = state.remind.value
     return filterToday(initial)
   }, (objA, objB) => {
-    if(update){
+    if (update) {
       setUpdate(false)
       return true
     }
-    return shallowEqual(objA, objB) 
+    return shallowEqual(objA, objB)
   });
   return list
 }
@@ -67,7 +68,7 @@ export default function Today() {
   const listRenderItem = (item: RemindItemProps) => {
     return (
       <AntdList.Item key={item.id} actions={getActions(item)}>
-        {item.description}
+        <AntdList.Item.Meta description={item.description}></AntdList.Item.Meta>
       </AntdList.Item>
     )
   }

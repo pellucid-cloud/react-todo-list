@@ -1,11 +1,11 @@
 import { ModelContentProps } from '@/utils/hooks/model';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { Form, Input, Select, TimePicker, Button, Flex, Space } from 'antd';
+import { Form, Input, Select, TimePicker, Button, Flex, DatePicker, Space } from 'antd';
 import React, { useCallback, useMemo } from 'react';
 import { RemindItemProps, RemindItemState, addItem, updateItem } from '@/store/modules/remind';
 import { createUUID } from '@/utils/crypto';
 import dayjs from 'dayjs'
-import moment from '@/utils/moment'
+import { BaseOptionType } from 'antd/es/select';
 import Point from '@/components/Point';
 type ModelType = 'add' | 'update'
 type ModelTypeHandleMap = Record<ModelType, Function>
@@ -19,8 +19,9 @@ const map: ModelTypeHandleMap = {
       item: {
         ...values,
         id: createUUID(),
-        date: moment().format('YYYY-MM-DD'),
         state: RemindItemState.wait,
+        time: values['time'].format('HH:mm:ss'),
+        date: values['date'].format('YYYY-MM-DD')
       },
       action: addItem
     }
@@ -30,8 +31,9 @@ const map: ModelTypeHandleMap = {
       item: {
         ...values,
         id,
-        date: moment().format('YYYY-MM-DD'),
         state: RemindItemState.wait,
+        time: values['time'].format('HH:mm:ss'),
+        date: values['date'].format('YYYY-MM-DD')
       },
       action: updateItem
     }
@@ -49,7 +51,7 @@ export default function (type: ModelType): React.FC<ModelContentProps<RemindItem
     const options = useMemo(() => {
       return list.map(item => ({ label: item.name, value: item.id, color: item.bgColor }))
     }, [list])
-    const optionRender = useCallback((option: any) => {
+    const optionRender = useCallback((option:any) => {
       return (
         <Space>
           <Point color={option.data.color} />
@@ -68,6 +70,9 @@ export default function (type: ModelType): React.FC<ModelContentProps<RemindItem
         </Form.Item>
         <Form.Item rules={[{ required: true }]} label="时间" name="time" initialValue={initial && dayjs(initial.time, 'HH:mm:ss')}>
           <TimePicker format="HH:mm:ss" />
+        </Form.Item>
+        <Form.Item rules={[{ required: true }]} label="日期" name="date" initialValue={initial && dayjs(initial.date, 'YYYY-MM-DD')}>
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
         <Form.Item>
           <Flex justify='flex-end' align='center' gap='1rem'>

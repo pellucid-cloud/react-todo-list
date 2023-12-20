@@ -1,11 +1,17 @@
-import { DatabaseTwoTone } from '@ant-design/icons';
+import { findItemIndex } from '@/utils/tools';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-interface listState {
-  value: listItemProps[]
+interface ListState {
+  value: ListItemProps[]
 }
-
-const initialState: listState = {
-  value: []
+export const notFiled = Symbol('notFiled').toString()
+const initialState: ListState = {
+  value: [
+    {
+      id: notFiled,
+      name: '未归档',
+      bgColor: '#C3C3C3'
+    }
+  ]
 }
 
 export const listStore = createSlice({
@@ -14,17 +20,24 @@ export const listStore = createSlice({
   initialState,
   // 同步修改方法
   reducers: {
-    
+    addItem(state, action: PayloadAction<ListItemProps>) {
+      state.value.push(action.payload)
+    },
+    updateItem(state, action: PayloadAction<ListItemProps>) {
+      const updateIndex = findItemIndex(action.payload, state.value, 'id')
+      state.value[updateIndex] = action.payload
+    },
+    removeItem(state, action: PayloadAction<ListItemProps>) {
+      const removeIndex = findItemIndex(action.payload, state.value, 'id')
+      state.value.splice(removeIndex, 1)
+    },
   }
 })
 
-
-
-export type listItemProps = {
+export type ListItemProps = {
   id: string,
   name: string,
-  bgColor: string,
-  icon: string
+  bgColor: string
 }
-
+export const { addItem, updateItem, removeItem } = listStore.actions
 export default listStore.reducer

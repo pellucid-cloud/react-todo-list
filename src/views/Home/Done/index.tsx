@@ -17,19 +17,19 @@ function useReminds() {
   return list
 }
 
-export default function Today() {
+export default function Done() {
   const reminds = useReminds()
   const listRenderItem = (item: RemindItemProps) => {
     return (
       <AntdList.Item key={item.id}>
-        {item.description}
+        <AntdList.Item.Meta description={item.description}></AntdList.Item.Meta>
       </AntdList.Item>
     )
   }
 
   return (
     <Wrapper>
-      <List header='已完成' dataSource={reminds} renderItem={listRenderItem} />
+      <List header='已完成' dataSource={reminds} renderItem={listRenderItem} empty="做点正事吧，巴巴托斯！！" />
     </Wrapper>
   )
 }

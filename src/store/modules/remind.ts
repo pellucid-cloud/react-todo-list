@@ -8,7 +8,7 @@ const initialState: remindState = {
   value: []
 }
 export const remindStore = createSlice({
-  name: 'list',
+  name: 'remind',
   // 数据状态
   initialState,
   // 同步修改方法
@@ -24,21 +24,18 @@ export const remindStore = createSlice({
       const removeIndex = findItemIndex(action.payload, state.value, 'id')
       state.value.splice(removeIndex, 1)
     },
-    changeItemState(state, action: PayloadAction<RemindItemProps>){
+    changeItemState(state, action: PayloadAction<RemindItemChangeStateProps>){
       const changeIndex = findItemIndex(action.payload, state.value, 'id')
-      state.value[changeIndex].state = action.payload.state
+      state.value[changeIndex] = {
+        ...state.value[changeIndex],
+        state: action.payload.state
+      }
     }
   }
 })
-/**
- * 0 取消
- * 1 完成
- * 2 待定
- */
 export enum RemindItemState {
-  cancel = 0,
-  finish = 1,
-  wait = 2
+  finish,
+  wait
 }
 
 export type RemindItemProps = {
@@ -47,6 +44,11 @@ export type RemindItemProps = {
   date: string,
   time: string,
   description: string,
+  state: RemindItemState
+}
+
+export type RemindItemChangeStateProps = {
+  id: string,
   state: RemindItemState
 }
 
