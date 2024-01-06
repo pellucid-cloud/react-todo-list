@@ -1,11 +1,12 @@
-import {Menu as AntdMenu} from 'antd'
-import {useNavigate} from 'react-router-dom';
-import {useState} from "react";
-import {MenuItemProps, defaultMenu} from "@/config/menu";
+import { Menu as AntdMenu } from 'antd'
+import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { MenuItemProps, defaultMenu } from "@/config/menu";
 import { getCurrentPath } from '@/utils/window';
+import styled from 'styled-components';
 
 export function Menu(props: { items: MenuItemProps[] }) {
-  const {items} = props
+  const { items } = props
   const navigate = useNavigate();
   const key = getCurrentPath() || defaultMenu
   const [selectKeys, setSelectKeys] = useState<string[]>([key]);
@@ -14,6 +15,16 @@ export function Menu(props: { items: MenuItemProps[] }) {
     navigate(event.key)
   };
   return (
-    <AntdMenu theme="dark" selectedKeys={selectKeys} items={items} onSelect={handleSelect}></AntdMenu>
+    <Wrapper>
+      <AntdMenu theme="dark" selectedKeys={selectKeys} mode='inline' items={items} onSelect={handleSelect}></AntdMenu>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  .point,
+  img {
+    position: absolute;
+    transform: translateX(calc(-100%));
+  }
+`

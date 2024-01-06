@@ -1,13 +1,18 @@
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import router from './router'
+import route, {pushList} from './router'
 import { themeConfig } from "@/theme/theme";
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import store, { persistor } from './store';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from './store/hooks';
 
 function useSetup() {
+  const [router, setRouter] = useState(route)
+  const list = useAppSelector(state => state.list.value)
+  useEffect(() => {
+    const newRouter = pushList(router, list)
+    setRouter(newRouter)
+  }, [list])
   return { router }
 }
 
@@ -15,14 +20,10 @@ function App() {
   const { router } = useSetup();
 
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <ConfigProvider theme={themeConfig}>
-          <RouterProvider router={createBrowserRouter(router)}>
-          </RouterProvider>
-        </ConfigProvider>
-      </PersistGate>
-    </Provider>
+    <ConfigProvider theme={themeConfig}>
+      <RouterProvider router={createBrowserRouter(router)}>
+      </RouterProvider>
+    </ConfigProvider>
   )
 }
 

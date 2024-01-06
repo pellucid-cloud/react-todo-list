@@ -14,7 +14,7 @@ export const BaseLayout: React.FC = () => {
     token: {colorBgContainer},
   } = theme.useToken();
   const menuList = getMenuList()
-
+  
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Wrapper>

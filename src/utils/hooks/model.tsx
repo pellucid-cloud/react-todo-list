@@ -17,6 +17,7 @@ export type ModelConfigProps<T> = {
 }
 export type ModalOperatorType<T> = {
   open: (arg?: T) => void,
+  close: () => void
 }
 export function useModel<T>(config: ModelConfigProps<T>): ModalOperatorType<T> {
   const {

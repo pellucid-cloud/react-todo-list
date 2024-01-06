@@ -1,3 +1,5 @@
+import { RcFile } from "antd/es/upload";
+
 export function supportChainFunction(fn: Function, props: Record<string, any>) {
   const emptyKeys: string[] = Object.keys(props).filter(key => props[key] == undefined) || [];
   if (emptyKeys) {

@@ -3,13 +3,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 interface ListState {
   value: ListItemProps[]
 }
-export const notFiled = Symbol('notFiled').toString()
+export const notFiled = 'notFiled'
 const initialState: ListState = {
   value: [
     {
       id: notFiled,
       name: '未归档',
-      bgColor: '#C3C3C3'
+      bgColor: '#C3C3C3',
+      icon: ''
     }
   ]
 }
@@ -37,7 +38,8 @@ export const listStore = createSlice({
 export type ListItemProps = {
   id: string,
   name: string,
-  bgColor: string
+  bgColor: string,
+  icon: string
 }
 export const { addItem, updateItem, removeItem } = listStore.actions
 export default listStore.reducer

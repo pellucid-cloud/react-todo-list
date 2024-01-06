@@ -7,12 +7,12 @@ import { useCallback } from "react";
 import { shallowEqual } from "react-redux";
 
 function useReminds() {
-  const filterToday = useCallback((arr: RemindItemProps[]) => {
+  const filterDone = useCallback((arr: RemindItemProps[]) => {
     return arr.filter(item => item.state === RemindItemState.finish)
   }, [])
   const list = useAppSelector((state) => {
     const initial = state.remind.value
-    return filterToday(initial)
+    return filterDone(initial)
   }, shallowEqual);
   return list
 }

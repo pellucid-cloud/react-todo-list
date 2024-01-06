@@ -2,7 +2,7 @@ import { useModel } from "@/utils/hooks/model";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { ListItemProps, notFiled, removeItem } from "@/store/modules/list";
 import styled from "styled-components";
-import getModel from './Model'
+import getModel from './components/Model'
 import { List as AntdList, Button, Flex, Modal } from 'antd'
 import MyList from "@/components/List";
 import { shallowEqual } from "react-redux";
@@ -43,7 +43,7 @@ export default function List() {
   ]
   const listRenderItem = (item: ListItemProps) => {
     return (
-      <AntdList.Item key={item.id.toString()} actions={item.id === notFiled ? [] : getActions(item)}>
+      <AntdList.Item key={item.id?.toString()} actions={item.id === notFiled ? [] : getActions(item)}>
         <AntdList.Item.Meta description={item.name} avatar={<Point color={item.bgColor} />}></AntdList.Item.Meta>
       </AntdList.Item>
     )

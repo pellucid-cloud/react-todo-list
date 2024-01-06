@@ -4,13 +4,14 @@ export type PointProps = {
   color: string,
   width?: number,
   height?: number,
+  className?: string
 }
 
-export default function Point({color, width, height}: PointProps) {
+export default function Point({color, width, height, className}: PointProps) {
   width = width || 20
   height = height || 20
   return (
-    <Wrapper color={color} width={width} height={height}>
+    <Wrapper className={`point ${className}`} color={color} width={width} height={height}>
 
     </Wrapper>
   )
