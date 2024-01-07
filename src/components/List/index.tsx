@@ -1,18 +1,18 @@
-import { List as AntdList, Empty } from 'antd'
+import { List as AntdList, Empty, ListProps } from 'antd'
 import { ReactNode } from 'react'
 
-type ListProps<T> = {
+type MyListProps<T> = ListProps<T> & {
   dataSource: T[],
   renderItem: (item: T, index: number) => ReactNode,
   header: string | ReactNode,
   empty?: string
 }
-export default function List<T extends {id: string}>({ dataSource, renderItem, header, empty }: ListProps<T>) {
+export default function List<T extends {id: string}>(props: MyListProps<T>) {
   const pagination = {
     pageSize: 10,
   }
   const local = {
-    emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={empty || "今日无事，勾栏听曲"} />,
+    emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={props.empty || "今日无事，勾栏听曲"} />,
   }
   return (
     <AntdList
@@ -21,10 +21,8 @@ export default function List<T extends {id: string}>({ dataSource, renderItem, h
       size="large"
       locale={local}
       className="list"
-      header={header}
       bordered
-      dataSource={dataSource}
-      renderItem={renderItem}
+      {...props}
     />
   )
 }

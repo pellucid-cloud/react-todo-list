@@ -3,15 +3,47 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RemindItemProps, RemindItemState, changeItemState, removeItem } from "@/store/modules/remind";
 import styled from "styled-components";
 import getModel from './Model'
-import { List as AntdList, Button, Flex, Modal } from 'antd'
+import { List as AntdList, Button, Divider, Flex, Modal, Radio, RadioChangeEvent, Space } from 'antd'
 import List from "@/components/List";
 import { shallowEqual } from "react-redux";
+import { useState } from "react";
 
 function useReminds() {
   const list = useAppSelector((state) => {
     return state.remind.value
   }, shallowEqual);
   return list
+}
+
+function StateRadioGroup({ id, state }: RemindItemProps) {
+  const dispatch = useAppDispatch();
+  const [label, setLabel] = useState<number>(state);
+  const radios = [
+    {
+      label: '未完成',
+      value: RemindItemState.wait,
+    },
+    {
+      label: '已完成',
+      value: RemindItemState.finish,
+    }
+  ]
+  const handleChange = (e: RadioChangeEvent) => {
+    setLabel(e.target.value);
+    dispatch(changeItemState({
+      id,
+      state: e.target.value
+    }))
+  }
+  return (
+    <Radio.Group onChange={handleChange} value={label}>
+      {
+        radios.map((radio, index) => (
+          <Radio key={index} value={radio.value}>{radio.label}</Radio>
+        ))
+      }
+    </Radio.Group>
+  )
 }
 
 export default function Remind() {
@@ -36,30 +68,17 @@ export default function Remind() {
       item && dispatch(removeItem(item))
     }
   })
-  const remindFinishModel = useModel<RemindItemProps>({
-    modal,
-    title: '完成代办',
-    Content: '您确定已经完成了该任务了吗？（该操作不可逆）',
-    onSuccess(item) {
-      if (item) {
-        dispatch(changeItemState({id: item.id, state: RemindItemState.finish}))
-      }
-    }
-  })
-  const getActions = (item: RemindItemProps) => {
-    const actions = [
-      <a onClick={() => remindUpdateModel.open(item)}>修改</a>,
-      <a onClick={() => remindDeleteModel.open(item)}>删除</a>
+  const getOperators = (item: RemindItemProps) => {
+    return [
+      <a key={0} onClick={() => remindUpdateModel.open(item)}>修改</a>,
+      <a key={1} onClick={() => remindDeleteModel.open(item)}>删除</a>
     ]
-    if(item.state === RemindItemState.wait){
-      actions.push(<a onClick={() => remindFinishModel.open(item)}>完成</a>)
-    }
-    return actions
   }
+  const getExtra = (item: RemindItemProps) => <Space split={<Divider type="vertical" />}>{getOperators(item)}</Space>
   const listRenderItem = (item: RemindItemProps) => {
     return (
-      <AntdList.Item key={item.id} actions={getActions(item)}>
-        <AntdList.Item.Meta description={item.description}></AntdList.Item.Meta>
+      <AntdList.Item key={item.id} extra={getExtra(item)} actions={[<StateRadioGroup {...item} />]}>
+        <AntdList.Item.Meta title={item.description} description={item.date}></AntdList.Item.Meta>
       </AntdList.Item>
     )
   }
@@ -82,4 +101,9 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   gap: 1rem;
+
+  .ant-list-item-action{
+    display: flex;
+    align-items: center;
+  }
 `

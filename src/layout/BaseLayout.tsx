@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Alert, Layout, Spin, theme} from 'antd';
-import {Breadcrumb} from '@/components/Breadcrumb'
 import {Header} from '@/layout/Header'
 import {Menu} from "@/layout/Menu";
 import styled from "styled-components";
@@ -26,7 +25,6 @@ export const BaseLayout: React.FC = () => {
             <Menu items={menuList}/>
           </Sider>
           <Layout style={{padding: '24px'}}>
-            <Breadcrumb/>
             <Content
               style={{
                 padding: 24,
@@ -39,7 +37,6 @@ export const BaseLayout: React.FC = () => {
                 <Spin tip="Loading...">
                   <Alert
                     message="Alert message title"
-                    description="Further details about the context of this alert."
                     type="info"
                   />
                 </Spin>

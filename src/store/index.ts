@@ -9,6 +9,7 @@ const rootReducer = combineReducers({
     list: listReducer,
     remind: remindReducer
 })
+
 const persistConfig = {
     key: 'root',
     storage,

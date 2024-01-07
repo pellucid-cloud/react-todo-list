@@ -1,6 +1,6 @@
 import { findItemIndex } from '@/utils/tools';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-interface ListState {
+export interface ListState {
   value: ListItemProps[]
 }
 export const notFiled = 'notFiled'

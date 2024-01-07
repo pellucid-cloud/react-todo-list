@@ -1,13 +1,14 @@
 import { useModel } from "@/utils/hooks/model";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { RemindItemProps, removeItem } from "@/store/modules/remind";
+import { RemindItemProps, RemindItemState, changeItemState, removeItem } from "@/store/modules/remind";
 import styled from "styled-components";
 import getModel from './components/Model'
 import { List as AntdList, Button, Flex, Modal } from 'antd'
 import List from "@/components/List";
 import moment from "moment";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "react-redux";
+import { SwapOutlined } from "@ant-design/icons";
 
 function useReminds() {
   const [update, setUpdate] = useState(false)
@@ -61,10 +62,24 @@ export default function Today() {
       item && dispatch(removeItem(item))
     }
   })
-  const getActions = (item: RemindItemProps) => [
-    <a onClick={() => remindUpdateModel.open(item)}>修改</a>,
-    <a onClick={() => remindDeleteModel.open(item)}>删除</a>,
-  ]
+  const stateMap =useMemo(() => {
+    return ['已完成', '未完成']
+  }, [])
+  const getActions = (item: RemindItemProps) => {
+    const [state, setState] = useState<boolean>(!!item.state);
+    const clickHandle = () => {
+      setState(!state)
+      dispatch(changeItemState({
+        id: item.id,
+        state: +!state
+      }))
+    }
+    return [
+      <a onClick={() => remindUpdateModel.open(item)}>修改</a>,
+      <a onClick={() => remindDeleteModel.open(item)}>删除</a>,
+      <Button type="dashed" icon={<SwapOutlined />} onClick={clickHandle}>{stateMap[+state]}</Button>
+    ]
+  }
   const listRenderItem = (item: RemindItemProps) => {
     return (
       <AntdList.Item key={item.id} actions={getActions(item)}>

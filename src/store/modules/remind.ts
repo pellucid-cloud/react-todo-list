@@ -1,10 +1,10 @@
 import { findItemIndex } from "@/utils/tools"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-interface remindState {
+export interface RemindState {
   value: RemindItemProps[]
 }
 
-const initialState: remindState = {
+const initialState: RemindState = {
   value: []
 }
 export const remindStore = createSlice({

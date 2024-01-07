@@ -1,6 +1,0 @@
-export function Breadcrumb(){
-  return (
-    <>
-    </>
-  );
-}
