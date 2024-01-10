@@ -1,6 +1,6 @@
 import { useModel } from "@/utils/hooks/model";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { RemindItemProps, RemindItemState, changeItemState, removeItem } from "@/store/modules/remind";
+import { RemindItemProps, changeItemState, removeItem } from "@/store/modules/remind";
 import styled from "styled-components";
 import getModel from './components/Model'
 import { List as AntdList, Button, Flex, Modal } from 'antd'
@@ -9,21 +9,43 @@ import moment from "moment";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "react-redux";
 import { SwapOutlined } from "@ant-design/icons";
+import TimerWorker from '@/worker/timer?worker'
+
+function useTimer() {
+  const worker = new TimerWorker()
+  return {
+    start(timeout: number) {
+      return new Promise<void>((resolve) => {
+        worker.postMessage({ type: 'start', timeout: timeout });
+        worker.addEventListener('message', () => {
+          resolve()
+        })
+      })
+    },
+    close() {
+      worker.postMessage({ type: 'close' });
+    }
+  }
+}
 
 function useReminds() {
-  const [update, setUpdate] = useState(false)
-  useEffect(() => {
+  const getTomorrowTime = () => {
     const now = new Date();
-    const tomorrow = new Date(now);;
+    const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
-    const delay = tomorrow.valueOf() - now.valueOf();
-    // TODO: 为确保精准计时，后期可使用Web Worker优化
-    const timer = setTimeout(() => {
+    return tomorrow.valueOf() - now.valueOf();
+  }
+  const [update, setUpdate] = useState(false)
+  const { start, close } = useTimer()
+  useEffect(() => {
+    const timeout = getTomorrowTime()
+    start(timeout).then(() => {
       setUpdate(true)
-    }, delay);
-    return () => clearInterval(timer)
+    })
+    return close
   }, [update])
+
   const filterToday = useCallback((arr: RemindItemProps[]) => {
     return arr.filter(item => item.date === moment().format('YYYY-MM-DD'))
   }, [])
@@ -62,7 +84,7 @@ export default function Today() {
       item && dispatch(removeItem(item))
     }
   })
-  const stateMap =useMemo(() => {
+  const stateMap = useMemo(() => {
     return ['已完成', '未完成']
   }, [])
   const getActions = (item: RemindItemProps) => {
