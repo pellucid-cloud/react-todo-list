@@ -8,8 +8,8 @@ import List from "@/components/List";
 import moment from "moment";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { shallowEqual } from "react-redux";
-import { SwapOutlined } from "@ant-design/icons";
 import TimerWorker from '@/worker/timer?worker'
+import ChangeStateButton from "./components/ChangeStateButton";
 
 function useTimer() {
   const worker = new TimerWorker()
@@ -88,18 +88,10 @@ export default function Today() {
     return ['已完成', '未完成']
   }, [])
   const getActions = (item: RemindItemProps) => {
-    const [state, setState] = useState<boolean>(!!item.state);
-    const clickHandle = () => {
-      setState(!state)
-      dispatch(changeItemState({
-        id: item.id,
-        state: +!state
-      }))
-    }
     return [
       <a onClick={() => remindUpdateModel.open(item)}>修改</a>,
       <a onClick={() => remindDeleteModel.open(item)}>删除</a>,
-      <Button type="dashed" icon={<SwapOutlined />} onClick={clickHandle}>{stateMap[+state]}</Button>
+      <ChangeStateButton item={item} stateMap={stateMap} />
     ]
   }
   const listRenderItem = (item: RemindItemProps) => {

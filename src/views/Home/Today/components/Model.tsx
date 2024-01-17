@@ -41,9 +41,9 @@ export default function (type: ModelType): React.FC<ModelContentProps<RemindItem
   return function ({ initial, close }) {
     const list = useAppSelector(state => state.list.value)
     const dispatch = useAppDispatch();
-    const handleFinish = (values: any) => {
+    const handleFinish = async (values: any) => {
       const { item, action } = map[type](values, initial?.id)
-      dispatch(action(item))
+      await dispatch(action(item))
       close()
     }
     const options = useMemo(() => {

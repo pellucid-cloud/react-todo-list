@@ -49,7 +49,7 @@ export default function (type: ModelType): React.FC<ModelContentProps<ListItemPr
       values['bgColor'] = bgColor
       values['icon'] = await compressionPicture(icon as RcFile, {type: icon?.type})
       const { item, action } = map[type](values, initial?.id)
-      dispatch(action(item))
+      await dispatch(action(item))
       close()
     }
     const uploadProps = {

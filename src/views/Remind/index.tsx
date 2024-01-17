@@ -2,7 +2,7 @@ import { useModel } from "@/utils/hooks/model";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RemindItemProps, RemindItemState, changeItemState, removeItem } from "@/store/modules/remind";
 import styled from "styled-components";
-import getModel from './Model'
+import getModel from './components/Model'
 import { List as AntdList, Button, Divider, Flex, Modal, Radio, RadioChangeEvent, Space } from 'antd'
 import List from "@/components/List";
 import { shallowEqual } from "react-redux";
