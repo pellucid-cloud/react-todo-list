@@ -61,29 +61,6 @@ function useReminds() {
   });
   return list
 }
-function use(promise){
-  if (promise.status === 'fulfilled') {
-    return promise.value;
-  } else if (promise.status === 'rejected') {
-    throw promise.reason;
-  } else if (promise.status === 'pending') {
-    throw promise;
-  } else {
-    promise.status = 'pending';
-    promise.then(
-      result => {
-        promise.status = 'fulfilled';
-        promise.value = result;
-      },
-      reason => {
-        promise.status = 'rejected';
-        promise.reason = reason;
-      },
-    );
-    throw promise;
-  }
-}
-
 export default function Today() {
   const reminds = useReminds()
   const dispatch = useAppDispatch();
@@ -123,9 +100,6 @@ export default function Today() {
       </AntdList.Item>
     )
   }
-  const a = use(new Promise(resolve =>  {
-    setTimeout(resolve, 10000)
-  }))
   return (
     <Wrapper>
       <Flex justify="flex-end" align="center">
