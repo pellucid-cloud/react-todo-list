@@ -5,5 +5,6 @@ export const COLORS = {
   siderBg: {
     content: '#F7F0EA',
     bottom: '#E7CCAA'
-  }
+  },
+  vitality: '#1677FF'
 }
