@@ -1,0 +1,73 @@
+@use "sass:math";
+
+body {
+  height: 100vh;
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090a0F 100%);
+  overflow: hidden;
+}
+
+.title {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  text-align: center;
+  font-family: 'lato', sans-serif;
+  font-weight: 300;
+  font-size: 50px;
+  letter-spacing: 10px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(white, #38495A);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@function getShadows($n) {
+  $shadows: '#{random(100)}vw #{random(100)}vh #FFF';
+  @for $i from 2 through $n {
+    $shadows: '#{$shadows}, #{random(100)}vw #{random(100)}vh #FFF'
+  }
+  @return unquote($shadows);
+}
+
+$duration: 800s;
+$count: 1000;
+$n = 5;
+@for $i from 1 through $n {
+  $duration: floor(math.div($duration, 2));
+  $count: floor(math.div($count, 2));
+  .layer#{$i} {
+    position: fixed;
+    $size: #{$i}px;
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    background: #FFF;
+    box-shadow: getShadows($count);
+    animation: moveup $duration linear infinite;
+
+    &::after {
+      content: '';
+      position: fixed;
+      width: inherit;
+      height: inherit;
+      left: 0;
+      top: 100vh;
+      border-radius: inherit;
+      box-shadow: inherit;
+    }
+  }
+}
+
+@keyframes moveup {
+  to {
+    transform: translateY(-100vh);
+  }
+
+  from {
+    transform: translateY(0);
+  }
+}
+:export {
+  count: $count
+}

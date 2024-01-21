@@ -1,7 +1,6 @@
 import {Layout} from "antd";
 import styled from "styled-components";
 const APP_NAME = DotEnv.APP_NAME;
-
 export function Header() {
   return (
     <Wrapper>

@@ -2,12 +2,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import listReducer from "@/store/modules/list";
 import remindReducer from "@/store/modules/remind";
+import publicReducer from "@/store/modules/public";
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from "redux-persist";
 
 const rootReducer = combineReducers({
     list: listReducer,
-    remind: remindReducer
+    remind: remindReducer,
+    public: publicReducer
 })
 
 const persistConfig = {

@@ -1,8 +1,9 @@
 import { BaseLayout } from '@/layout/BaseLayout'
 import { Page404 } from '@/views/Error/page404';
-import { Navigate, RouteObject } from "react-router-dom";
-import { lazy } from 'react';
+import { Navigate } from "react-router-dom";
+import {lazy, ReactNode} from 'react';
 import { ListItemProps } from '@/store/modules/list';
+import Login from "@/views/Login";
 
 const Today = lazy(() => import('@/views/Home/Today'));
 const All = lazy(() => import('@/views/Home/All'));
@@ -10,11 +11,11 @@ const Done = lazy(() => import('@/views/Home/Done'));
 const Remind = lazy(() => import('@/views/Remind'))
 const List = lazy(() => import('@/views/List'))
 const ItemList = lazy(() => import('@/views/List/ItemList'))
-// TODO: 路由权限控制
 export default [
   {
     path: '/',
     element: <BaseLayout />,
+    auth: true,
     children: [
       {
         path: '/',
@@ -39,9 +40,6 @@ export default [
       {
         path: 'list/all',
         element: <List />,
-        // meta:{
-        //   requiresAuth: true
-        // }
       },
       {
         path: 'list/:id',
@@ -50,11 +48,20 @@ export default [
     ]
   },
   {
+    path: '/login',
+    element: <Login />
+  },
+  {
     path: '*',
     element: <Page404 />
   }
 ] as RouteObject[]
-
+export type RouteObject = {
+  path: string,
+  element: ReactNode,
+  auth: boolean,
+  children: RouteObject[]
+}
 export function pushList(router: RouteObject[], list: ListItemProps[]): RouteObject[] {
   const listRoute = router[0].children?.find(route => route.path === '/list')
   if (!listRoute) return router;
@@ -66,3 +73,4 @@ export function pushList(router: RouteObject[], list: ListItemProps[]): RouteObj
   })
   return router
 }
+
