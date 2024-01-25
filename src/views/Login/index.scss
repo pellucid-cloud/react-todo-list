@@ -32,7 +32,7 @@ body {
 
 $duration: 800s;
 $count: 1000;
-$n = 5;
+$n: 5;
 @for $i from 1 through $n {
   $duration: floor(math.div($duration, 2));
   $count: floor(math.div($count, 2));
@@ -61,11 +61,11 @@ $n = 5;
 
 @keyframes moveup {
   to {
-    transform: translateY(-100vh);
+    transform: translateY(-200vh);
   }
 
   from {
-    transform: translateY(0);
+    transform: translateY(50vh);
   }
 }
 :export {
