@@ -61,13 +61,10 @@ $n: 5;
 
 @keyframes moveup {
   to {
-    transform: translateY(-200vh);
+    transform: translateY(-150vh);
   }
 
   from {
-    transform: translateY(50vh);
+    transform: translateY(-50vh);
   }
-}
-:export {
-  count: $count
 }
