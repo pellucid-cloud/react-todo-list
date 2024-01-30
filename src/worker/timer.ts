@@ -6,8 +6,9 @@ export type TimerProps = {
 function clearTimer() {
   if (timer) clearTimeout(timer);
 }
-const handleMap: Record<string, Function> = {
+const handleMap: Record<string, (props?:TimerProps) => void> = {
   'start': ({ timeout }: TimerProps) => {
+    if (!timeout) return
     clearTimer()
     timer = setTimeout(() => {
       self.postMessage({

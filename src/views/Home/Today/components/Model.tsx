@@ -7,14 +7,18 @@ import { createUUID } from '@/utils/crypto';
 import dayjs from 'dayjs'
 import moment from '@/utils/moment'
 import Point from '@/components/Point';
+import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import {BaseOptionType} from "rc-select/lib/Select";
+import {FlattenOptionData} from "rc-select/lib/interface";
+import {notFiled} from "@/store/modules/list";
 type ModelType = 'add' | 'update'
-type ModelTypeHandleMap = Record<ModelType, Function>
+type ModelTypeHandleMap = Record<ModelType, (values: RemindItemProps, id?:string) => ModelTypeHandleMapResult>
 type ModelTypeHandleMapResult = {
   item: RemindItemProps,
-  action: Function
+  action: ActionCreatorWithPayload<RemindItemProps>
 }
 const map: ModelTypeHandleMap = {
-  add: (values: any): ModelTypeHandleMapResult => {
+  add: (values: RemindItemProps): ModelTypeHandleMapResult => {
     return {
       item: {
         ...values,
@@ -25,7 +29,7 @@ const map: ModelTypeHandleMap = {
       action: addItem
     }
   },
-  update: (values: any, id: string) => {
+  update: (values: RemindItemProps, id: string) => {
     return {
       item: {
         ...values,
@@ -38,10 +42,13 @@ const map: ModelTypeHandleMap = {
   }
 }
 export default function (type: ModelType): React.FC<ModelContentProps<RemindItemProps>> {
-  return function ({ initial, close }) {
+  return function ({ initial = {
+    time: dayjs(new Date()),
+    listId: notFiled
+  }, close }) {
     const list = useAppSelector(state => state.list.value)
     const dispatch = useAppDispatch();
-    const handleFinish = async (values: any) => {
+    const handleFinish = async (values: RemindItemProps) => {
       const { item, action } = map[type](values, initial?.id)
       await dispatch(action(item))
       close()
@@ -49,7 +56,7 @@ export default function (type: ModelType): React.FC<ModelContentProps<RemindItem
     const options = useMemo(() => {
       return list.map(item => ({ label: item.name, value: item.id, color: item.bgColor }))
     }, [list])
-    const optionRender = useCallback((option: any) => {
+    const optionRender = useCallback((option: FlattenOptionData<BaseOptionType>) => {
       return (
         <Space>
           <Point color={option.data.color} />
@@ -66,8 +73,8 @@ export default function (type: ModelType): React.FC<ModelContentProps<RemindItem
           <Select placeholder='请选择所属列表' options={options} optionRender={optionRender} >
           </Select>
         </Form.Item>
-        <Form.Item rules={[{ required: true }]} label="时间" name="time" initialValue={initial && dayjs(initial.time, 'HH:mm:ss')}>
-          <TimePicker format="HH:mm:ss" />
+        <Form.Item rules={[{ required: true }]} label="时间" name="time" initialValue={initial && dayjs(initial.time, 'YYYY-MM-DD HH:mm:ss')}>
+          <TimePicker format="YYYY-MM-DD HH:mm:ss" />
         </Form.Item>
         <Form.Item>
           <Flex justify='flex-end' align='center' gap='1rem'>
