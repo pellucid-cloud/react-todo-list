@@ -1,9 +1,9 @@
-import { useAppSelector } from "@/store/hooks";
-import { RemindItemProps } from "@/store/modules/remind";
+import {useAppSelector} from "@/store/hooks";
+import {RemindItemProps} from "@/store/modules/remind";
 import styled from "styled-components";
-import { List as AntdList } from 'antd'
+import {List as AntdList} from 'antd'
 import List from "@/components/List";
-import { shallowEqual } from "react-redux";
+import {shallowEqual} from "react-redux";
 
 function useReminds() {
   const list = useAppSelector((state) => {
@@ -24,7 +24,7 @@ export default function All() {
 
   return (
     <Wrapper>
-      <List header='全部任务' dataSource={reminds} renderItem={listRenderItem} />
+      <List header='全部任务' dataSource={reminds} renderItem={listRenderItem}/>
     </Wrapper>
   )
 }

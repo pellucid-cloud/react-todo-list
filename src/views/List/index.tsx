@@ -1,14 +1,14 @@
-import { useModel } from "@/utils/hooks/model";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { ListItemProps, notFiled, removeItem } from "@/store/modules/list";
+import {useModel} from "@/utils/hooks/model";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {ListItemProps, notFiled, removeItem} from "@/store/modules/list";
 import styled from "styled-components";
 import getModel from './components/Model'
-import { List as AntdList, Button, Flex, Modal } from 'antd'
+import {List as AntdList, Button, Flex, Modal} from 'antd'
 import MyList from "@/components/List";
-import { shallowEqual } from "react-redux";
+import {shallowEqual} from "react-redux";
 import Point from "@/components/Point";
 
-function uselist() {
+function useList() {
   const list = useAppSelector((state) => {
     return state.list.value
   }, shallowEqual);
@@ -16,7 +16,7 @@ function uselist() {
 }
 
 export default function List() {
-  const list = uselist()
+  const list = useList()
   const dispatch = useAppDispatch();
   const [modal, contextHolder] = Modal.useModal();
   const listAddModel = useModel({
@@ -44,7 +44,7 @@ export default function List() {
   const listRenderItem = (item: ListItemProps) => {
     return (
       <AntdList.Item key={item.id?.toString()} actions={item.id === notFiled ? [] : getActions(item)}>
-        <AntdList.Item.Meta description={item.name} avatar={<Point color={item.bgColor} />}></AntdList.Item.Meta>
+        <AntdList.Item.Meta description={item.name} avatar={<Point color={item.bgColor}/>}></AntdList.Item.Meta>
       </AntdList.Item>
     )
   }
@@ -56,7 +56,7 @@ export default function List() {
           <Button onClick={() => listAddModel.open()}>添加</Button>
         </Flex>
       </Flex>
-      <MyList header='我的列表' dataSource={list} renderItem={listRenderItem} />
+      <MyList header='我的列表' dataSource={list} renderItem={listRenderItem}/>
       {contextHolder}
     </Wrapper>
   )

@@ -1,49 +1,18 @@
-import { useModel } from "@/utils/hooks/model";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { RemindItemProps, RemindItemState, changeItemState, removeItem } from "@/store/modules/remind";
+import {useModel} from "@/utils/hooks/model";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {RemindItemProps, removeItem} from "@/store/modules/remind";
 import styled from "styled-components";
 import getModel from './components/Model'
-import { List as AntdList, Button, Divider, Flex, Modal, Radio, RadioChangeEvent, Space } from 'antd'
+import {List as AntdList, Button, Divider, Flex, Modal, Space} from 'antd'
 import List from "@/components/List";
-import { shallowEqual } from "react-redux";
-import { useState } from "react";
+import {shallowEqual} from "react-redux";
+import StateRadioGroup from "@/components/StateRadioGroup";
 
 function useReminds() {
   const list = useAppSelector((state) => {
     return state.remind.value
   }, shallowEqual);
   return list
-}
-
-function StateRadioGroup({ id, state }: RemindItemProps) {
-  const dispatch = useAppDispatch();
-  const [label, setLabel] = useState<number>(state);
-  const radios = [
-    {
-      label: '未完成',
-      value: RemindItemState.wait,
-    },
-    {
-      label: '已完成',
-      value: RemindItemState.finish,
-    }
-  ]
-  const handleChange = (e: RadioChangeEvent) => {
-    setLabel(e.target.value);
-    dispatch(changeItemState({
-      id,
-      state: e.target.value
-    }))
-  }
-  return (
-    <Radio.Group onChange={handleChange} value={label}>
-      {
-        radios.map((radio, index) => (
-          <Radio key={index} value={radio.value}>{radio.label}</Radio>
-        ))
-      }
-    </Radio.Group>
-  )
 }
 
 export default function Remind() {
@@ -74,7 +43,7 @@ export default function Remind() {
       <a key={1} onClick={() => remindDeleteModel.open(item)}>删除</a>
     ]
   }
-  const getExtra = (item: RemindItemProps) => <Space split={<Divider type="vertical" />}>{getOperators(item)}</Space>
+  const getExtra = (item: RemindItemProps) => <Space split={<Divider type="vertical"/>}>{getOperators(item)}</Space>
   const listRenderItem = (item: RemindItemProps) => {
     return (
       <AntdList.Item key={item.id} extra={getExtra(item)} actions={[<StateRadioGroup {...item} />]}>
@@ -82,7 +51,6 @@ export default function Remind() {
       </AntdList.Item>
     )
   }
-
   return (
     <Wrapper>
       <Flex justify="flex-end" align="center">
@@ -90,7 +58,7 @@ export default function Remind() {
           <Button onClick={() => remindAddModel.open()}>添加</Button>
         </Flex>
       </Flex>
-      <List header='提醒事项' dataSource={reminds} renderItem={listRenderItem} />
+      <List header='提醒事项' dataSource={reminds} renderItem={listRenderItem}/>
       {contextHolder}
     </Wrapper>
   )
@@ -102,7 +70,7 @@ const Wrapper = styled.div`
   height: 100%;
   gap: 1rem;
 
-  .ant-list-item-action{
+  .ant-list-item-action {
     display: flex;
     align-items: center;
   }

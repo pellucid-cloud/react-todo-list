@@ -1,8 +1,10 @@
-import { findItemIndex } from '@/utils/tools';
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import {findItemIndex} from '@/utils/tools';
+import {createSlice, PayloadAction} from "@reduxjs/toolkit"
+
 export interface ListState {
   value: ListItemProps[]
 }
+
 export const notFiled = 'notFiled'
 const initialState: ListState = {
   value: [
@@ -41,5 +43,5 @@ export type ListItemProps = {
   bgColor: string,
   icon: string
 }
-export const { addItem, updateItem, removeItem } = listStore.actions
+export const {addItem, updateItem, removeItem} = listStore.actions
 export default listStore.reducer

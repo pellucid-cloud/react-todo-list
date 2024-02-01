@@ -7,17 +7,19 @@ export type PointProps = {
   className?: string
 }
 
-export default function Point({color, width, height, className}: PointProps) {
-  width = width || 20
-  height = height || 20
+export default function Point(props: PointProps) {
+  const {
+    color,
+    width = 20,
+    height = 20,
+    className
+  } = props
   return (
-    <Wrapper className={`point ${className}`} color={color} width={width} height={height}>
-
-    </Wrapper>
+    <Wrapper className={`point ${className}`} color={color} width={width} height={height}/>
   )
 }
 
-const Wrapper = styled.div<{color: string, width: number, height: number}>`
+const Wrapper = styled.div<{ color: string, width: number, height: number }>`
   width: ${props => props.width}px;
   height: ${props => props.height}px;
   background-color: ${props => props.color};

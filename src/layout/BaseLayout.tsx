@@ -4,7 +4,7 @@ import {Header} from '@/layout/Header'
 import {Menu} from "@/layout/Menu";
 import styled from "styled-components";
 import {Outlet} from "react-router-dom";
-import {getMenuList} from '@/config';
+import {useMenuList} from '@/config';
 import Loading from "@/views/loading/Loading";
 
 const {Content, Sider} = Layout;
@@ -13,7 +13,7 @@ export const BaseLayout: React.FC = () => {
   const {
     token: {colorBgContainer},
   } = theme.useToken();
-  const menuList = getMenuList()
+  const menuList = useMenuList()
 
   const [collapsed, setCollapsed] = useState(false);
   return (
@@ -35,7 +35,7 @@ export const BaseLayout: React.FC = () => {
               }}
             >
               <React.Suspense fallback={
-                <Loading />
+                <Loading/>
               }>
                 <Outlet/>
               </React.Suspense>

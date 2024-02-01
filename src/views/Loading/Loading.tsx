@@ -1,23 +1,24 @@
 import styled from "styled-components";
-import {themeConfig} from "@/theme/theme";
 import {COLORS} from "@/theme/colors";
 import {hexToRgba} from "@/utils/colors";
 
 type LoadingProps = {
   $count?: number,
   $ballSize?: number,
-  $containerSize?: number
+  $containerSize?: number,
+  $aniDuration?: number
 }
-export default function Loading(customProps: LoadingProps) {
-  const props = Object.assign({}, {
-    $ballSize: 12,
-    $count: 36,
-    $containerSize: 150,
-    $aniDuration: 2000
-  }, customProps)
+export default function Loading(props: LoadingProps) {
+  const {
+    $ballSize = 12,
+    $count = 36,
+    $aniDuration = 2000,
+    $containerSize = 150
+  } = props
   return (
-    <Wrapper className="loading" {...props}>
-      {new Array(props.$count).fill(0).map((_, index) => {
+    <Wrapper className="loading" $ballSize={$ballSize} $count={$count} $aniDuration={$aniDuration}
+             $containerSize={$containerSize}>
+      {new Array($count).fill(0).map((_, index) => {
         return <div className="dot" key={index}></div>
       })}
     </Wrapper>
@@ -47,7 +48,7 @@ function generateSelector({$count, $containerSize, $aniDuration}: LoadingProps) 
   }).join('\n')
 }
 
-const Wrapper = styled.div<{ $ballSize: number, $containerSize: number }>`
+const Wrapper = styled.div<{ $ballSize: number, $containerSize: number, $aniDuration: number, $count: number }>`
   height: 100%;
 
   .dot {

@@ -1,44 +1,46 @@
-import { useModel } from "@/utils/hooks/model";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { RemindItemProps, changeItemState, removeItem } from "@/store/modules/remind";
+import {useModel} from "@/utils/hooks/model";
+import {useAppDispatch, useAppSelector} from "@/store/hooks";
+import {RemindItemProps, removeItem} from "@/store/modules/remind";
 import styled from "styled-components";
 import getModel from './components/Model'
-import { List as AntdList, Button, Flex, Modal } from 'antd'
+import {List as AntdList, Button, Flex, Modal} from 'antd'
 import List from "@/components/List";
 import moment from "moment";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { shallowEqual } from "react-redux";
+import {useCallback, useEffect, useMemo, useState} from "react";
+import {shallowEqual} from "react-redux";
 import TimerWorker from '@/worker/timer?worker'
 import ChangeStateButton from "./components/ChangeStateButton";
 import {use} from "@/utils/hooks/use";
+import {fetchData} from "@/views/Home/Today/data";
 
 function useTimer() {
   const worker = new TimerWorker()
   return {
     start(timeout: number) {
       return new Promise<void>((resolve) => {
-        worker.postMessage({ type: 'start', timeout: timeout });
+        worker.postMessage({type: 'start', timeout: timeout});
         worker.addEventListener('message', () => {
           resolve()
         })
       })
     },
     close() {
-      worker.postMessage({ type: 'close' });
+      worker.postMessage({type: 'close'});
     }
   }
 }
 
+const getTomorrowTime = () => {
+  const now = new Date();
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+  return tomorrow.valueOf() - now.valueOf();
+}
+
 function useReminds() {
-  const getTomorrowTime = () => {
-    const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
-    return tomorrow.valueOf() - now.valueOf();
-  }
   const [update, setUpdate] = useState(false)
-  const { start, close } = useTimer()
+  const {start, close} = useTimer()
   useEffect(() => {
     const timeout = getTomorrowTime()
     start(timeout).then(() => {
@@ -48,7 +50,7 @@ function useReminds() {
   }, [update])
 
   const filterToday = useCallback((arr: RemindItemProps[]) => {
-    return arr.filter(item => item.date === moment().format('YYYY-MM-DD'))
+    return arr.filter(item => item.date.includes(moment().format('YYYY-MM-DD')))
   }, [])
   const list = useAppSelector((state) => {
     const initial = state.remind.value
@@ -62,6 +64,7 @@ function useReminds() {
   });
   return list
 }
+
 export default function Today() {
   const reminds = useReminds()
   const dispatch = useAppDispatch();
@@ -92,7 +95,7 @@ export default function Today() {
     return [
       <a onClick={() => remindUpdateModel.open(item)}>修改</a>,
       <a onClick={() => remindDeleteModel.open(item)}>删除</a>,
-      <ChangeStateButton item={item} stateMap={stateMap} />
+      <ChangeStateButton item={item} stateMap={stateMap}/>
     ]
   }
   const listRenderItem = (item: RemindItemProps) => {
@@ -102,6 +105,8 @@ export default function Today() {
       </AntdList.Item>
     )
   }
+  // 模拟加载
+  use(fetchData('/getUser'))
   return (
     <Wrapper>
       <Flex justify="flex-end" align="center">
@@ -109,7 +114,7 @@ export default function Today() {
           <Button onClick={() => remindAddModel.open()}>添加</Button>
         </Flex>
       </Flex>
-      <List header='今日代办' dataSource={reminds} renderItem={listRenderItem} />
+      <List header='今日代办' dataSource={reminds} renderItem={listRenderItem}/>
       {contextHolder}
     </Wrapper>
   )

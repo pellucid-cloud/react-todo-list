@@ -1,4 +1,4 @@
-function getBaseColors(hex: string){
+function getBaseColors(hex: string) {
   const _parseInt = (number: string) => {
     return parseInt(number);
   }

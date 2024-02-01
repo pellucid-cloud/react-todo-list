@@ -1,28 +1,35 @@
-export const fileToDataURL = (file: Blob): Promise<any> => {
+export const fileToDataURL = (file: Blob): Promise<unknown> => {
   return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onloadend = (e) => { resolve((e.target!).result); };
+    reader.onloadend = (e) => {
+      resolve((e.target!).result);
+    };
     reader.readAsDataURL(file);
   });
 };
 export const dataURLToImage = (dataURL: string): Promise<HTMLImageElement> => {
   return new Promise((resolve) => {
     const img = new Image();
-    img.onload = () => { resolve(img); };
+    img.onload = () => {
+      resolve(img);
+    };
     img.src = dataURL;
   });
 };
 export const canvastoBase64 = (canvas: HTMLCanvasElement, type: string): Promise<string> => {
-  return new Promise((resolve) => { resolve(canvas.toDataURL(type)); });
+  return new Promise((resolve) => {
+    resolve(canvas.toDataURL(type));
+  });
 };
 
 interface PictureConfig {
-  type?:string;
+  type?: string;
   width?: number;
   height?: number;
 }
 
 export function compressionPicture<T extends File>(file: T, config?: PictureConfig) {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise<string>(async (resolve) => {
     const canvas = document.createElement('canvas');
     canvas.width = config?.width || 20;

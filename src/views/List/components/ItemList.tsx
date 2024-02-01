@@ -1,12 +1,12 @@
-import { useAppSelector } from "@/store/hooks";
-import { RemindItemProps } from "@/store/modules/remind";
+import {useAppSelector} from "@/store/hooks";
+import {RemindItemProps} from "@/store/modules/remind";
 import styled from "styled-components";
-import { List as AntdList } from 'antd'
+import {List as AntdList} from 'antd'
 import List from "@/components/List";
-import { useCallback } from "react";
-import { shallowEqual } from "react-redux";
-import { useParams } from "react-router-dom";
-import { notFiled } from "@/store/modules/list";
+import {useCallback} from "react";
+import {shallowEqual} from "react-redux";
+import {useParams} from "react-router-dom";
+import {notFiled} from "@/store/modules/list";
 
 function useReminds(listid: string | undefined) {
   listid = listid || notFiled
@@ -33,7 +33,7 @@ export default function ItemList() {
 
   return (
     <Wrapper>
-      <List header='已完成' dataSource={reminds} renderItem={listRenderItem} empty="空空如也～" />
+      <List header='已完成' dataSource={reminds} renderItem={listRenderItem} empty="空空如也～"/>
     </Wrapper>
   )
 }

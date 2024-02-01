@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {message} from "antd";
 
 export const baseURL = DotEnv.APP_SERVER_URL + DotEnv.APP_BASE_API;
 export const REQUEST_SUFFIX = DotEnv.REQUEST_SUFFIX
@@ -17,7 +16,7 @@ $http.interceptors.request.use(config => {
 })
 
 $http.interceptors.response.use(response => {
-  if(response.data.code != 0){
+  if (response.data.code != 0) {
     return Promise.reject(response.data)
   }
   return Promise.resolve(response.data);

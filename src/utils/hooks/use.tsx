@@ -1,4 +1,4 @@
-export function use(promise){
+export function use(promise) {
   if (promise.status === 'fulfilled') {
     return promise.value;
   } else if (promise.status === 'rejected') {

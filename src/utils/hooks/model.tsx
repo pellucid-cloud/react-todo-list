@@ -1,7 +1,8 @@
-import { ModalFunc } from "antd/es/modal/confirm"
-import { FunctionComponent, ReactNode } from "react"
-import { HookAPI } from "antd/es/modal/useModal"
-import { ModalFuncProps } from "antd"
+import {ModalFunc} from "antd/es/modal/confirm"
+import {FunctionComponent, ReactNode} from "react"
+import {HookAPI} from "antd/es/modal/useModal"
+import {ModalFuncProps} from "antd"
+
 export type ModelContentProps<T> = {
   close: () => void,
   initial?: T
@@ -19,6 +20,7 @@ export type ModalOperatorType<T> = {
   open: (arg?: T) => void,
   close: () => void
 }
+
 export function useModel<T>(config: ModelConfigProps<T>): ModalOperatorType<T> {
   const {
     modal,
@@ -30,6 +32,7 @@ export function useModel<T>(config: ModelConfigProps<T>): ModalOperatorType<T> {
     onClose
   } = config
   let instance: ReturnType<ModalFunc>;
+
   function close() {
     instance.destroy();
   }
@@ -37,7 +40,7 @@ export function useModel<T>(config: ModelConfigProps<T>): ModalOperatorType<T> {
   const model = {
     open(arg?: T) {
       const isFunctionComponent = typeof Content === 'function';
-      const content = isFunctionComponent ? <Content initial={arg} close={close} /> : Content;
+      const content = isFunctionComponent ? <Content initial={arg} close={close}/> : Content;
       const props: ModalFuncProps = {
         title,
         content,
@@ -53,4 +56,4 @@ export function useModel<T>(config: ModelConfigProps<T>): ModalOperatorType<T> {
   }
 
   return model
-};
+}

@@ -1,5 +1,12 @@
-import { MenuProps } from "antd";
-import { EnvironmentTwoTone,DatabaseTwoTone,CarryOutTwoTone,ExclamationCircleTwoTone,TagsTwoTone } from '@ant-design/icons';
+import {MenuProps} from "antd";
+import {
+  EnvironmentTwoTone,
+  DatabaseTwoTone,
+  CarryOutTwoTone,
+  ExclamationCircleTwoTone,
+  TagsTwoTone
+} from '@ant-design/icons';
+
 export const defaultMenu = 'today'
 export default [
   {
@@ -9,17 +16,17 @@ export default [
       {
         label: '今日',
         key: 'today',
-        icon: <EnvironmentTwoTone />
+        icon: <EnvironmentTwoTone/>
       },
       {
         label: '所有',
         key: 'all',
-        icon: <DatabaseTwoTone />
+        icon: <DatabaseTwoTone/>
       },
       {
         label: '已完成',
         key: 'done',
-        icon: <CarryOutTwoTone />
+        icon: <CarryOutTwoTone/>
       }
     ]
   },
@@ -29,7 +36,7 @@ export default [
   {
     label: '提醒事项',
     key: 'remind',
-    icon: <ExclamationCircleTwoTone />
+    icon: <ExclamationCircleTwoTone/>
   },
   {
     type: 'divider'
@@ -37,8 +44,8 @@ export default [
   {
     label: '我的列表',
     key: 'list',
-    icon: <TagsTwoTone />,
+    icon: <TagsTwoTone/>,
     children: []
   }
 ] as MenuItemProps[]
-export type MenuItemProps = Required<MenuProps>['items'][number] & {key:string,children?: MenuItemProps[]}
+export type MenuItemProps = Required<MenuProps>['items'][number] & { key: string, children?: MenuItemProps[] }

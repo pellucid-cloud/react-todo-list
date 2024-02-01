@@ -1,25 +1,25 @@
-import { RcFile } from "antd/es/upload";
-
-export function supportChainFunction(fn: Function, props: Record<string, any>) {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function supportChainFunction(fn: Function, props: object) {
   const emptyKeys: string[] = Object.keys(props).filter(key => props[key] == undefined) || [];
   if (emptyKeys) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
     const chain: Record<string, Function> = {}
-    for (let key of emptyKeys) {
-      chain[key] = (arg: any) => {
+    for (const key of emptyKeys) {
+      chain[key] = arg => {
         props[key] = arg;
         return supportChainFunction(fn, props);
       }
     }
     return chain
   } else {
-    return fn.apply(null, getParameterNames(fn).map(key => props[key]))
+    return fn(getParameterNames(fn).map(key => props[key]))
   }
 }
-
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function getParameterNames(fn: Function) {
-  var COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-  var code = fn.toString().replace(COMMENTS, '');
-  var result = code.slice(code.indexOf('(') + 1, code.indexOf(')'))
+  const COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+  const code = fn.toString().replace(COMMENTS, '');
+  const result = code.slice(code.indexOf('(') + 1, code.indexOf(')'))
     .match(/([^\s,]+)/g);
   return result === null
     ? []

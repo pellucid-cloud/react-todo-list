@@ -1,13 +1,14 @@
-import { useAppSelector } from "@/store/hooks";
-import { RemindItemProps, RemindItemState } from "@/store/modules/remind";
+import {useAppSelector} from "@/store/hooks";
+import {RemindItemProps, RemindItemState} from "@/store/modules/remind";
 import styled from "styled-components";
-import { List as AntdList } from 'antd'
+import {List as AntdList} from 'antd'
 import List from "@/components/List";
-import { useCallback } from "react";
-import { shallowEqual } from "react-redux";
+import {useCallback} from "react";
+import {shallowEqual} from "react-redux";
+import StateRadioGroup from "@/components/StateRadioGroup";
 
 function useReminds() {
-  const filterDone = useCallback((arr: RemindItemProps[]) => {
+  const filterDone = useCallback((arr) => {
     return arr.filter(item => item.state === RemindItemState.finish)
   }, [])
   const list = useAppSelector((state) => {
@@ -21,7 +22,7 @@ export default function Done() {
   const reminds = useReminds()
   const listRenderItem = (item: RemindItemProps) => {
     return (
-      <AntdList.Item key={item.id}>
+      <AntdList.Item key={item.id} actions={[<StateRadioGroup {...item} />]}>
         <AntdList.Item.Meta description={item.description}></AntdList.Item.Meta>
       </AntdList.Item>
     )
@@ -29,7 +30,7 @@ export default function Done() {
 
   return (
     <Wrapper>
-      <List header='已完成' dataSource={reminds} renderItem={listRenderItem} empty="做点正事吧，巴巴托斯！！" />
+      <List header='已完成' dataSource={reminds} renderItem={listRenderItem} empty="做点正事吧，巴巴托斯！！"/>
     </Wrapper>
   )
 }

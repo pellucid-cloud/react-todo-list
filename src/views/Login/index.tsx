@@ -84,7 +84,7 @@ export default () => {
       {new Array(bg_mark_count).fill(null).map((_, index) =>
         <div key={index} className={'layer' + (index + 1)}></div>
       )}
-      <Login />
+      <Login/>
     </>
   )
 }

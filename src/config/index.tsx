@@ -1,14 +1,17 @@
-import { useAppSelector } from "@/store/hooks";
-import menuList, { MenuItemProps } from "./menu";
+import {useAppSelector} from "@/store/hooks";
+import menuList, {MenuItemProps} from "./menu";
 import {AppstoreTwoTone} from '@ant-design/icons'
 import Point from '@/components/Point'
-export function getMenuList() {
-  const setMenuItemKey = (item: MenuItemProps, generatorKey: Function) => {
+
+export function useMenuList() {
+  const setMenuItemKey = (item: MenuItemProps, generatorKey: () => string): MenuItemProps => {
     if (item.key) {
       return item
     }
     if (item?.children) {
-      item.children = item.children.map((menu, index) => menu && setMenuItemKey(menu, () => `${generatorKey()}${index}`))
+      item.children = item.children.map((menu: MenuItemProps, index) =>
+        menu && setMenuItemKey(menu, () => `${generatorKey()}${index}`)
+      )
     }
     return {
       ...item,
@@ -23,10 +26,10 @@ export function getMenuList() {
     {
       key: 'list/all',
       label: '全部',
-      icon: <AppstoreTwoTone className="point" />
+      icon: <AppstoreTwoTone className="point"/>
     },
     ...list.map(item => {
-      const icon = item.icon ? <img src={item.icon} /> : <Point color={item.bgColor}/>
+      const icon = item.icon ? <img src={item.icon}/> : <Point color={item.bgColor}/>
       return {
         key: `list/${item.id}`,
         label: item.name,
