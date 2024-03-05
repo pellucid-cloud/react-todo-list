@@ -1,9 +1,12 @@
-export const fileToDataURL = (file: Blob): Promise<unknown> => {
-  return new Promise((resolve) => {
+export const fileToDataURL =(file: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = (e) => {
-      resolve((e.target!).result);
+      resolve(e.target?.result?.toString() || '');
     };
+    reader.onerror = error => {
+      reject(error)
+    }
     reader.readAsDataURL(file);
   });
 };

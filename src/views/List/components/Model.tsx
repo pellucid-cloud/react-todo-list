@@ -1,17 +1,18 @@
-import {ModelContentProps} from '@/utils/hooks/model';
-import {useAppDispatch} from '@/store/hooks';
-import {Form, Input, Button, Flex, ColorPicker, Upload, UploadFile} from 'antd';
-import React, {useMemo, useState} from 'react';
-import {ListItemProps, addItem, updateItem} from '@/store/modules/list';
-import {createUUID} from '@/utils/crypto';
-import {UploadOutlined} from '@ant-design/icons';
-import {compressionPicture} from '@/utils/pictrue';
-import {RcFile} from 'antd/es/upload';
+import { ModelContentProps } from '@/utils/hooks/model';
+import { useAppDispatch } from '@/store/hooks';
+import { Form, Input, Button, Flex, ColorPicker, Upload } from 'antd';
+import React, { useMemo, useState } from 'react';
+import { ListItemProps, addItem, updateItem } from '@/store/modules/list';
+import { createUUID } from '@/utils/crypto';
+import { UploadOutlined } from '@ant-design/icons';
+import { compressionPicture } from '@/utils/pictrue';
+import { RcFile } from 'antd/es/upload';
 import styled from 'styled-components';
-import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { Color } from 'antd/es/color-picker';
 
 type ModelType = 'add' | 'update'
-type ModelTypeHandleMap = Record<ModelType, (values: ListItemProps, id?: string) => ModelTypeHandleMapResult>
+type ModelTypeHandleMap = Record<ModelType, (values: ListItemProps, id: string) => ModelTypeHandleMapResult>
 type ModelTypeHandleMapResult = {
   item: ListItemProps,
   action: ActionCreatorWithPayload<ListItemProps>
@@ -38,27 +39,37 @@ const map: ModelTypeHandleMap = {
     }
   }
 }
+type FormData = {
+  bgColor: string | Color,
+  icon: File | unknown,
+  id: string,
+  name: string
+}
 export default function (type: ModelType): React.FC<ModelContentProps<ListItemProps>> {
-  return function ({initial, close}) {
+  return ({ initial = {
+    id: '',
+    bgColor: '',
+    name: ''
+  }, close }) => {
     const dispatch = useAppDispatch();
-    const [icon, setIcon] = useState<UploadFile>();
+    const [icon, setIcon] = useState<File>();
     const windowURL = window.URL || window.webkitURL;
     const selectFileUrl = useMemo(() => {
-      return icon && windowURL.createObjectURL(new Blob([icon as RcFile], {type: icon.type}))
+      return icon && windowURL.createObjectURL(new Blob([icon as RcFile], { type: icon.type }))
     }, [icon])
-    const handleFinish = async (values: ListItemProps) => {
-      const bgColor = typeof values['bgColor'] === 'string' ? values['bgColor'] : values['bgColor'].toHexString()
-      values['bgColor'] = bgColor
+    const handleFinish = async (values: FormData) => {
+      const bgColor = typeof values.bgColor == 'string' ? values.bgColor : values.bgColor?.toHexString()
+      values.bgColor = bgColor
       if (icon)
-        values['icon'] = await compressionPicture(icon as File, {type: icon?.type})
-      const {item, action} = map[type](values, initial?.id)
+        values.icon = await compressionPicture(icon, { type: icon?.type })
+      const { item, action } = map[type](values as ListItemProps, initial.id)
       await dispatch(action(item))
       close()
     }
     const uploadProps = {
       path: '',
       accept: 'image/*',
-      beforeUpload: async (file: UploadFile) => {
+      beforeUpload: async (file: File) => {
         setIcon(file);
         return false;
       },
@@ -67,19 +78,19 @@ export default function (type: ModelType): React.FC<ModelContentProps<ListItemPr
     return (
       <Wrapper>
         <Form layout="vertical" onFinish={handleFinish}>
-          <Form.Item rules={[{required: true}]} label="名称" initialValue={initial?.name} name="name">
-            <Input placeholder='请输入名称'/>
+          <Form.Item rules={[{ required: true }]} label="名称" initialValue={initial?.name} name="name">
+            <Input placeholder='请输入名称' />
           </Form.Item>
-          <Form.Item rules={[{required: true}]} label="颜色" name="bgColor"
-                     initialValue={initial?.bgColor || '#1677FF'}>
-            <ColorPicker showText/>
+          <Form.Item rules={[{ required: true }]} label="颜色" name="bgColor"
+            initialValue={initial?.bgColor || '#1677FF'}>
+            <ColorPicker showText />
           </Form.Item>
-          <Form.Item rules={[{required: false}]} label="icon" name="icon">
+          <Form.Item rules={[{ required: false }]} label="icon" name="icon">
             <Upload {...uploadProps}>
               {
                 icon ?
-                  <img className='icon' src={selectFileUrl} alt=""/> :
-                  <Button icon={<UploadOutlined/>}>选择 Icon</Button>
+                  <img className='icon' src={selectFileUrl} alt="" /> :
+                  <Button icon={<UploadOutlined />}>选择 Icon</Button>
               }
             </Upload>
           </Form.Item>

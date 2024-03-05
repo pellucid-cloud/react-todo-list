@@ -1,8 +1,11 @@
 import styled from "styled-components";
-import {COLORS} from "@/theme/colors";
-import {hexToRgba} from "@/utils/colors";
+import { COLORS } from "@/theme/colors";
+import { hexToRgba } from "@/utils/colors";
+import { debounce } from 'throttle-debounce';
+import { useEffect, useState } from "react";
 
 type LoadingProps = {
+  $delay?: number,
   $count?: number,
   $ballSize?: number,
   $containerSize?: number,
@@ -11,13 +14,21 @@ type LoadingProps = {
 export default function Loading(props: LoadingProps) {
   const {
     $ballSize = 12,
+    $delay = 0,
     $count = 36,
     $aniDuration = 2000,
     $containerSize = 150
   } = props
+  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    const showLoading = debounce($delay, () => {
+      setLoading(true);
+    });
+    showLoading();
+  }, [loading])
   return (
-    <Wrapper className="loading" $ballSize={$ballSize} $count={$count} $aniDuration={$aniDuration}
-             $containerSize={$containerSize}>
+    <Wrapper className="loading" $show={loading} $ballSize={$ballSize} $count={$count} $aniDuration={$aniDuration}
+      $containerSize={$containerSize}>
       {new Array($count).fill(0).map((_, index) => {
         return <div className="dot" key={index}></div>
       })}
@@ -25,10 +36,10 @@ export default function Loading(props: LoadingProps) {
   )
 }
 
-function generateSelector({$count, $containerSize, $aniDuration}: LoadingProps) {
+function generateSelector({ $count, $containerSize, $aniDuration }: Omit<Required<LoadingProps>, '$delay'>) {
   const pdeg = 360 / $count;
   const opacityStep = 1 / $count;
-  const fn = (x) => Math.abs(Math.sin(9 * x));
+  const fn = (x: number) => Math.abs(Math.sin(9 * x));
   return new Array($count).fill(0).map((_, i) => {
     const index = i + 1
     return `
@@ -48,8 +59,9 @@ function generateSelector({$count, $containerSize, $aniDuration}: LoadingProps) 
   }).join('\n')
 }
 
-const Wrapper = styled.div<{ $ballSize: number, $containerSize: number, $aniDuration: number, $count: number }>`
+const Wrapper = styled.div<Omit<Required<LoadingProps>, '$delay'> & { $show: boolean }>`
   height: 100%;
+  display: ${props => (props.$show ? 'block' : 'none')};
 
   .dot {
     position: absolute;
@@ -81,7 +93,9 @@ const Wrapper = styled.div<{ $ballSize: number, $containerSize: number, $aniDura
     animation: moveWhite ${props => props.$aniDuration}ms infinite;
   }
 
-  ${generateSelector} @keyframes moveBlack {
+  ${generateSelector} 
+  
+  @keyframes moveBlack {
     0% {
       animation-timing-function: ease-in;
     }
