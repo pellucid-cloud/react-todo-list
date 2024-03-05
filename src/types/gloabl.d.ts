@@ -8,3 +8,5 @@ declare global {
     REQUEST_SUFFIX: string;
   }
 }
+
+export {}

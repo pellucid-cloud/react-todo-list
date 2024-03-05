@@ -1,10 +1,10 @@
-import {Button, Card, Form, Input} from "antd";
+import { Button, Card, Form, Input } from "antd";
 import styled from "styled-components";
-import {useAppDispatch} from "@/store/hooks";
-import {login as loginAction} from "@/store/modules/public";
-import {login} from "@/apis/user"
-import {LoginProps} from "@/apis/user";
-import {useNavigate} from "react-router-dom";
+import { useAppDispatch } from "@/store/hooks";
+import { login as loginAction } from "@/store/modules/public";
+import { login } from "@/apis/user"
+import { LoginProps } from "@/apis/user";
+import { useNavigate } from "react-router-dom";
 import './index.scss'
 
 function Login() {
@@ -12,11 +12,12 @@ function Login() {
   const navigate = useNavigate()
   const onFinish = async (values: LoginProps) => {
     login(values).then(async (res) => {
-      await dispatch(loginAction(res.data))
+      dispatch(loginAction(res.data))
       navigate('/')
     }).catch(async () => {
-      await dispatch(loginAction({
-        userid: 'test'
+      dispatch(loginAction({
+        username: 'test',
+        password: '123'
       }))
       navigate('/')
     })
@@ -31,19 +32,19 @@ function Login() {
             rules={[
               {
                 required: true,
-                message: 'Please input your username!'
+                message: '请输入用户名称'
               },
             ]}>
-            <Input size='large' placeholder='请输入用户名称'/>
+            <Input size='large' placeholder='请输入用户名称' />
           </Form.Item>
           <Form.Item
             name='password'
             rules={[
               {
-                required: true, message: 'Please input your password!'
+                required: true, message: '请输入密码'
               }
             ]}>
-            <Input size='large' placeholder='请输入密码'/>
+            <Input size='large' placeholder='请输入密码' />
           </Form.Item>
           <Form.Item>
             <Button type='primary' htmlType='submit' size='large' block>
@@ -84,7 +85,7 @@ export default () => {
       {new Array(bg_mark_count).fill(null).map((_, index) =>
         <div key={index} className={'layer' + (index + 1)}></div>
       )}
-      <Login/>
+      <Login />
     </>
   )
 }

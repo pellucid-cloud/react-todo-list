@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layout, Spin, theme } from 'antd';
+import { Layout, theme } from 'antd';
 import { Header } from '@/layout/Header'
 import { Menu } from "@/layout/Menu";
 import styled from "styled-components";

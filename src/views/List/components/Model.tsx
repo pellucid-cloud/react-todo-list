@@ -2,7 +2,7 @@ import { ModelContentProps } from '@/utils/hooks/model';
 import { useAppDispatch } from '@/store/hooks';
 import { Form, Input, Button, Flex, ColorPicker, Upload } from 'antd';
 import React, { useMemo, useState } from 'react';
-import { ListItemProps, addItem, updateItem } from '@/store/modules/list';
+import { ListItemProps, addItem, notFiled, updateItem } from '@/store/modules/list';
 import { createUUID } from '@/utils/crypto';
 import { UploadOutlined } from '@ant-design/icons';
 import { compressionPicture } from '@/utils/pictrue';
@@ -47,7 +47,7 @@ type FormData = {
 }
 export default function (type: ModelType): React.FC<ModelContentProps<ListItemProps>> {
   return ({ initial = {
-    id: '',
+    id: notFiled,
     bgColor: '',
     name: ''
   }, close }) => {

@@ -4,22 +4,27 @@ import {Form, Input, Select, TimePicker, Button, Flex, DatePicker, Space} from '
 import React, {useCallback, useMemo} from 'react';
 import {RemindItemProps, RemindItemState, addItem, updateItem} from '@/store/modules/remind';
 import {createUUID} from '@/utils/crypto';
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import Point from '@/components/Point';
 import {ActionCreatorWithPayload} from "@reduxjs/toolkit";
 import {FlattenOptionData} from "rc-select/lib/interface";
 import {BaseOptionType} from "rc-select/lib/Select";
+import { notFiled } from '@/store/modules/list';
 
 type ModelType = 'add' | 'update'
-type ModelTypeHandleMap = Record<ModelType, (values: RemindItemProps, id?: string) => ModelTypeHandleMapResult>
+type ModelTypeHandleMap = Record<ModelType, (values: RemindItemFormProps, id: string) => ModelTypeHandleMapResult>
 type ModelTypeHandleMapResult = {
   item: RemindItemProps,
   action: ActionCreatorWithPayload<RemindItemProps>
 }
 
-interface RemindItemFormProps extends RemindItemProps {
-  time: dayjs,
-  date: dayjs
+type RemindItemFormProps = {
+  time: Dayjs,
+  date: Dayjs,
+  id: string,
+  listId: string,
+  description: string,
+  state: RemindItemState
 }
 
 const map: ModelTypeHandleMap = {
@@ -48,8 +53,15 @@ const map: ModelTypeHandleMap = {
     }
   }
 }
+
 export default function (type: ModelType): React.FC<ModelContentProps<RemindItemProps>> {
-  return function ({initial, close}) {
+  return ({initial = {
+    id: '',
+    description: '',
+    listId: notFiled,
+    time: '',
+    date: ''
+  }, close}) => {
     const list = useAppSelector(state => state.list.value)
     const dispatch = useAppDispatch();
     const handleFinish = async (values: RemindItemFormProps) => {

@@ -61,6 +61,7 @@ export default function List() {
     </Wrapper>
   )
 }
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
