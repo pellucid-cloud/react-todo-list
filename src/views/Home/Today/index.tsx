@@ -1,31 +1,31 @@
-import {useModel} from "@/utils/hooks/model";
-import {useAppDispatch, useAppSelector} from "@/store/hooks";
-import {RemindItemProps, removeItem} from "@/store/modules/remind";
+import { useModel } from "@/utils/hooks/model";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { RemindItemProps, removeItem } from "@/store/modules/remind";
 import styled from "styled-components";
 import getModel from './components/Model'
-import {List as AntdList, Button, Flex, Modal} from 'antd'
+import { List as AntdList, Button, Flex, Modal } from 'antd'
 import List from "@/components/List";
 import moment from "moment";
-import {useCallback, useEffect, useMemo, useState} from "react";
-import {shallowEqual} from "react-redux";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { shallowEqual } from "react-redux";
 import TimerWorker from '@/worker/timer?worker'
 import ChangeStateButton from "./components/ChangeStateButton";
-import {use} from "@/utils/hooks/use";
-import {fetchData} from "@/views/Home/Today/data";
+import Point from "@/components/Point";
+import { ListItemProps } from "@/store/modules/list";
 
 function useTimer() {
   const worker = new TimerWorker()
   return {
     start(timeout: number) {
       return new Promise<void>((resolve) => {
-        worker.postMessage({type: 'start', timeout: timeout});
+        worker.postMessage({ type: 'start', timeout: timeout });
         worker.addEventListener('message', () => {
           resolve()
         })
       })
     },
     close() {
-      worker.postMessage({type: 'close'});
+      worker.postMessage({ type: 'close' });
     }
   }
 }
@@ -40,7 +40,7 @@ const getTomorrowTime = () => {
 
 function useReminds() {
   const [update, setUpdate] = useState(false)
-  const {start, close} = useTimer()
+  const { start, close } = useTimer()
   useEffect(() => {
     const timeout = getTomorrowTime()
     start(timeout).then(() => {
@@ -49,12 +49,23 @@ function useReminds() {
     return close
   }, [update])
 
-  const filterToday = useCallback((arr: RemindItemProps[]) => {
-    return arr.filter(item => item.date.includes(moment().format('YYYY-MM-DD')))
+  const filterToday = useCallback((reminds: RemindItemProps[], list: ListItemProps[]) => {
+    const map: Record<string, ListItemProps> = {}
+    // 空间换时间
+    list.forEach(item => {
+      map[item.id] = item
+    })
+    return reminds.map(item => {
+      // 确保item地址不变化，从而减少不必要的渲染
+      const r: RemindItemProps & Partial<ListItemProps> = item
+      r.bgColor = map[item.listId].bgColor
+      r.name = map[item.listId].name
+      return r
+    }).filter(item => item.date.includes(moment().format('YYYY-MM-DD')))
   }, [])
+  
   const list = useAppSelector((state) => {
-    const initial = state.remind.value
-    return filterToday(initial)
+    return filterToday(state.remind.value, state.list.value)
   }, (objA, objB) => {
     if (update) {
       setUpdate(false)
@@ -95,18 +106,19 @@ export default function Today() {
     return [
       <a onClick={() => remindUpdateModel.open(item)}>修改</a>,
       <a onClick={() => remindDeleteModel.open(item)}>删除</a>,
-      <ChangeStateButton item={item} stateMap={stateMap}/>
+      <ChangeStateButton item={item} stateMap={stateMap} />
     ]
   }
-  const listRenderItem = (item: RemindItemProps) => {
+  const listRenderItem = (item: RemindItemProps & Partial<ListItemProps> ) => {
     return (
       <AntdList.Item key={item.id} actions={getActions(item)}>
-        <AntdList.Item.Meta description={item.description}></AntdList.Item.Meta>
+        <Point color={item?.bgColor} />
+        <AntdList.Item.Meta description={item.description + item.bgColor}></AntdList.Item.Meta>
       </AntdList.Item>
     )
   }
   // 模拟加载
-  use(fetchData('/getUser'))
+  // use(fetchData('/getUser'))
   return (
     <Wrapper>
       <Flex justify="flex-end" align="center">
@@ -114,7 +126,7 @@ export default function Today() {
           <Button onClick={() => remindAddModel.open()}>添加</Button>
         </Flex>
       </Flex>
-      <List header='今日代办' dataSource={reminds} renderItem={listRenderItem}/>
+      <List header='今日代办' dataSource={reminds} renderItem={listRenderItem} />
       {contextHolder}
     </Wrapper>
   )

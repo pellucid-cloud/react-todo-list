@@ -1,21 +1,21 @@
+import { COLORS } from "@/theme/colors"
 import styled from "styled-components"
 
 export type PointProps = {
-  color: string,
+  color?: string,
   width?: number,
   height?: number,
   className?: string
 }
 
-export default function Point(props: PointProps) {
-  const {
-    color,
-    width = 20,
-    height = 20,
-    className
-  } = props
+export default function Point({
+  color = COLORS.vitality,
+  width = 20,
+  height = 20,
+  className
+}: PointProps) {
   return (
-    <Wrapper className={`point ${className}`} color={color} width={width} height={height}/>
+    <Wrapper className={`point ${className}`} color={color} width={width} height={height} />
   )
 }
 
