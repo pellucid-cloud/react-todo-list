@@ -14,7 +14,7 @@ type LoadingProps = {
 export default function Loading(props: LoadingProps) {
   const {
     $ballSize = 12,
-    $delay = 0,
+    $delay = 200,
     $count = 36,
     $aniDuration = 2000,
     $containerSize = 150

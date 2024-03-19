@@ -1,5 +1,5 @@
-import {COLORS} from "@/theme/colors";
-import {ThemeConfig} from "antd";
+import { COLORS } from "@/theme/colors";
+import { ThemeConfig } from "antd";
 
 export const themeConfig = {
   components: {
@@ -18,4 +18,7 @@ export const themeConfig = {
       darkItemSelectedBg: COLORS.siderBg.bottom
     }
   },
+  token: {
+    fontSize: 16
+  }
 } as ThemeConfig

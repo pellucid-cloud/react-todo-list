@@ -35,7 +35,7 @@ export const BaseLayout: React.FC = () => {
               }}
             >
               <React.Suspense fallback={
-                <Loading $delay={100} />
+                <Loading />
               }>
                 <Outlet />
               </React.Suspense>

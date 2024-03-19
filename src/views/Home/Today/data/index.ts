@@ -1,13 +1,13 @@
 const cache = new Map();
 
-export function fetchData(url) {
+export function fetchData(url: string) {
   if (!cache.has(url)) {
     cache.set(url, getData(url));
   }
   return cache.get(url);
 }
 
-async function getData(url) {
+async function getData(url: string) {
   if (url === '/getUser') {
     return await getUser();
   } else {
@@ -17,7 +17,7 @@ async function getData(url) {
 
 async function getUser() {
   await new Promise(resolve => {
-    setTimeout(resolve, 3000);
+    setTimeout(resolve, 100);
   });
 
   return 'user';
