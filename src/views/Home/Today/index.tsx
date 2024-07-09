@@ -13,6 +13,8 @@ import ChangeStateButton from "./components/ChangeStateButton";
 import Point from "@/components/Point";
 import { ListItemProps } from "@/store/modules/list";
 
+type RemindAndListView = RemindItemProps & Partial<ListItemProps>
+
 function useTimer() {
   const worker = new TimerWorker()
   return {
@@ -49,23 +51,12 @@ function useReminds() {
     return close
   }, [update])
 
-  const filterToday = useCallback((reminds: RemindItemProps[], list: ListItemProps[]) => {
-    const map: Record<string, ListItemProps> = {}
-    // 空间换时间
-    list.forEach(item => {
-      map[item.id] = item
-    })
-    return reminds.map(item => {
-      // 确保item地址不变化，从而减少不必要的渲染
-      const r: RemindItemProps & Partial<ListItemProps> = item
-      r.bgColor = map[item.listId].bgColor
-      r.name = map[item.listId].name
-      return r
-    }).filter(item => item.date.includes(moment().format('YYYY-MM-DD')))
+  const filterToday = useCallback((reminds: RemindItemProps[]) => {
+    return reminds.filter(item => item.date.includes(moment().format('YYYY-MM-DD')))
   }, [])
-  
-  const list = useAppSelector((state) => {
-    return filterToday(state.remind.value, state.list.value)
+
+  const reminds = useAppSelector((state) => {
+    return filterToday(state.remind.value)
   }, (objA, objB) => {
     if (update) {
       setUpdate(false)
@@ -73,7 +64,25 @@ function useReminds() {
     }
     return shallowEqual(objA, objB)
   });
-  return list
+
+  const list = useList();
+  
+  return useMemo(() => {
+    const map: Record<string, ListItemProps> = {}
+    list.forEach(item => {
+      map[item.id] = item
+    })
+    return reminds.map((item:RemindAndListView) => {
+      return {
+        ...item,
+        bgColor: map[item.listId].bgColor,
+      }
+    })
+  }, [reminds, list])
+}
+
+function useList(){
+  return useAppSelector(state => state.list.value, shallowEqual);
 }
 
 export default function Today() {
@@ -109,11 +118,10 @@ export default function Today() {
       <ChangeStateButton item={item} stateMap={stateMap} />
     ]
   }
-  const listRenderItem = (item: RemindItemProps & Partial<ListItemProps> ) => {
+  const listRenderItem = (item: RemindItemProps & Partial<ListItemProps>) => {
     return (
       <AntdList.Item key={item.id} actions={getActions(item)}>
-        <Point color={item?.bgColor} />
-        <AntdList.Item.Meta description={item.description + item.bgColor}></AntdList.Item.Meta>
+        <AntdList.Item.Meta avatar={<Point color={item?.bgColor} />} title={item.description}></AntdList.Item.Meta>
       </AntdList.Item>
     )
   }

@@ -1,8 +1,8 @@
 import {useAppSelector} from "@/store/hooks";
 import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+import {ReactNode, useEffect} from "react";
 
-export default function AuthRouter({children}) {
+export default function AuthRouter({children}: {children: ReactNode}) {
   const token = useAppSelector(state => state.public.user?.userid)
   const navigate = useNavigate()
   useEffect(() => {

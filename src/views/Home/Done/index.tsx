@@ -8,7 +8,7 @@ import {shallowEqual} from "react-redux";
 import StateRadioGroup from "@/components/StateRadioGroup";
 
 function useReminds() {
-  const filterDone = useCallback((arr) => {
+  const filterDone = useCallback((arr: RemindItemProps[]) => {
     return arr.filter(item => item.state === RemindItemState.finish)
   }, [])
   const list = useAppSelector((state) => {

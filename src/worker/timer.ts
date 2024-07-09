@@ -9,8 +9,9 @@ function clearTimer() {
 }
 
 const handleMap: Record<string, (props?: TimerProps) => void> = {
-  'start': ({timeout}: TimerProps) => {
-    if (!timeout) return
+  'start': (timerProps) => {
+    if (!timerProps) return;
+    const timeout = timerProps?.timeout || 0
     clearTimer()
     timer = setTimeout(() => {
       self.postMessage({

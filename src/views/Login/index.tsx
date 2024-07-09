@@ -17,7 +17,8 @@ function Login() {
     }).catch(async () => {
       dispatch(loginAction({
         username: 'test',
-        password: '123'
+        password: '123',
+        userid: 'test'
       }))
       navigate('/')
     })

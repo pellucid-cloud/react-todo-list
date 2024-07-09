@@ -1,5 +1,5 @@
-import {findItemIndex} from "@/utils/tools"
-import {createSlice, PayloadAction} from "@reduxjs/toolkit"
+import { findItemIndex } from "@/utils/tools"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface RemindState {
   value: RemindItemProps[]
@@ -27,10 +27,7 @@ export const remindStore = createSlice({
     },
     changeItemState(state, action: PayloadAction<RemindItemChangeStateProps>) {
       const changeIndex = findItemIndex(action.payload, state.value, 'id')
-      state.value[changeIndex] = {
-        ...state.value[changeIndex],
-        state: action.payload.state
-      }
+      state.value[changeIndex].state = action.payload.state
     }
   }
 })
@@ -57,5 +54,5 @@ export type RemindItemChangeStateProps = {
 export const DateFormat = 'YYYY-MM-DD'
 export const TimeFormat = 'HH:mm'
 
-export const {addItem, updateItem, removeItem, changeItemState} = remindStore.actions
+export const { addItem, updateItem, removeItem, changeItemState } = remindStore.actions
 export default remindStore.reducer
